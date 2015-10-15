@@ -30,6 +30,7 @@ function startGame() {
 function startRound(){
   hitButton.prop("disabled",false);
   stayButton.prop("disabled",false);
+  $('#dealerCard2').addClass("inactive");
 
   $('.hcard').remove();
   $('.dhcard').remove();
@@ -63,6 +64,8 @@ function dealRound(){
       dealer.addCard(getNextCard());
       break;
     default:
+      $('.pcard').removeClass("inactive");
+      $('#dealerCard1').removeClass("inactive");
       $('#userCard1').text(player.cards[0].rank + player.cards[0].suit);
       $('#userCard2').text(player.cards[1].rank + player.cards[1].suit);
       $('#dealerCard1').text(dealer.cards[0].rank + dealer.cards[0].suit);
@@ -236,6 +239,7 @@ function dealToDealer() {
 function endRound() {
   document.getElementById("hitButton").disabled = true;
   document.getElementById("stayButton").disabled = true;
+  $('#dealerCard2').removeClass("inactive");
   $('#dealerCard2').text(dealer.cards[1].rank + dealer.cards[1].suit);
   var d, p;
   d = dealer.getScore();

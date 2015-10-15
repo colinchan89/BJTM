@@ -29,6 +29,17 @@
   background-color: white;
   display: inline-block;
 }
+.card {
+  height: 75px;
+  width: 50px;
+  border: 4px solid red;
+  border-radius: 5px;
+  background-color: white;
+  display: inline-block;
+  position: absolute;
+  left: 40px;
+  top: 250px;
+}
 .hcard {
   height: 75px;
   width: 50px;
@@ -48,6 +59,9 @@
   display: inline-block;
   margin-top: 20px;
   margin-left: 7px;
+}
+.inactive {
+  background-color: red;
 }
 .dcardcontainer {
   position: absolute;

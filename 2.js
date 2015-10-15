@@ -9,6 +9,7 @@ var curPlayerHand;
 var numPlayerHands;
 var dealRoundCounter;
 var aggScore = 0;
+var lastResult;
 
 window.onload = startGame;
 
@@ -22,16 +23,19 @@ function startGame() {
   player = new Hand("player");
   // for (i = 0; i < player.length; i++)
   //   player = new Hand("player" + i);
-  document.getElementById("hitButton").disabled = true;
-  document.getElementById("stayButton").disabled = true;
+  hitButton.prop("disabled",true);
+  stayButton.prop("disabled",true);
 }
 
 function startRound(){
-  document.getElementById("hitButton").disabled = false;
-  document.getElementById("stayButton").disabled = false;
+  hitButton.prop("disabled",false);
+  stayButton.prop("disabled",false);
 
   $('.hcard').remove();
+  $('.dhcard').remove();
   $("p").remove();
+  dealerHitId = 2;
+  playerHitId = 2;
 
 
   dealer.reset();
@@ -62,9 +66,7 @@ function dealRound(){
       $('#userCard1').text(player.cards[0].rank + player.cards[0].suit);
       $('#userCard2').text(player.cards[1].rank + player.cards[1].suit);
       $('#dealerCard1').text(dealer.cards[0].rank + dealer.cards[0].suit);
-      $('#dealerCard2').text(dealer.cards[1].rank + dealer.cards[1].suit);
-      // $('#dealerCard2').text(" ");
-      $('#dealerCard2').css("color", "white");
+      $('#dealerCard2').text("");
       $('#userScore').text("Your Score: " + player.getScore());
       $('#dealerScore').text("Dealer Shows: " + dealer.cards[0].rank);
       playRound();
@@ -83,24 +85,24 @@ function dealRound(){
 function playRound(){
   if(player.getScore() === 21 && dealer.getScore() !== 21){
     player.blackjack = true;
-    $('.scorecontainer').last().append('<p>Blackjack! You Win!!! 😎</p>');
-    aggScore += 1;
-    $('#aggScore').text("Cumulative Score: " + aggScore);
+    // $('.scorecontainer').last().append('<p>Blackjack! You Win!!! 😎</p>');
+    // aggScore += 1;
+    // $('#aggScore').text("Cumulative Score: " + aggScore);
     endRound();
   }
   if(player.getScore() !== 21 && dealer.getScore() === 21){
     dealer.blackjack = true;
-    $('.scorecontainer').last().append('<p>Dealer Has Blackjack!😲Tough Luck!</p>');
-    $('#dealerCard2').css("color","black");
-    aggScore -= 1;
-    $('#aggScore').text("Cumulative Score: " + aggScore);
+    // $('.scorecontainer').last().append('<p>Dealer Has Blackjack!😲Tough Luck!</p>');
+    // $('#dealerCard2').css("color","black");
+    // aggScore -= 1;
+    // $('#aggScore').text("Cumulative Score: " + aggScore);
     endRound();
   }
   if(player.getScore() === 21 && dealer.getScore() === 21){
     player.blackjack = true;
     dealer.blackjack = true;
-    $('.scorecontainer').last().append('<p>DOUBLE BJ! 😜</p>');
-    $('#dealerCard2').css("color","black");
+    // $('.scorecontainer').last().append('<p>DOUBLE BJ! 😜</p>');
+    // $('#dealerCard2').css("color","black");
     endRound();
   }
   // if(player.blackjack || dealer.blackjack){
@@ -135,16 +137,16 @@ function playRound(){
 // function playerDouble(){
 //   scipt for double down goes here!
 // }
+var playerHitId = 2;
+
 function playerHit() {
   var x, y;
-  var z = 1;
-  z += 1;
 
   // x = curPlayerHand;
   player.addCard(getNextCard());
-  $('.pcardcontainer').last().append('<div class="hcard" id="hitCard'+z+'"></div>');
-  $('#hitCard'+z).text(player.cards[z].rank + player.cards[z].suit);
-
+  $('.pcardcontainer').last().append('<div class="hcard" id="hitCard'+playerHitId+'"></div>');
+  $('#hitCard'+playerHitId).text(player.cards[playerHitId].rank + player.cards[playerHitId].suit);
+  playerHitId += 1;
   y = player.getScore();
 
   if (y > 21) {
@@ -155,11 +157,11 @@ function playerHit() {
   else {
     $('#userScore').text('Your Score: ' + y);
   }
-  if (y === 21 || player.doubledown){
-    $('#userScore').text('Your Score: ' + y);
-    endRound();
-    return;
-  }
+  // if (player.doubledown){
+  //   $('#userScore').text('Your Score: ' + y);
+  //   endRound();
+  //   return;
+  // }
   // if (player.split && player.cards.length === 2){
   //   if (player.split && player.cards[0].rank === "A"){
   //     $('#userScore').text('Your Score: ' + y);
@@ -206,66 +208,88 @@ function startDealer() {
   playDealer();
 }
 
+
+
 function playDealer() {
   var d;
   d = dealer.getScore();
-  $('#dealerCard2').css("color","black");
+  $('#dealerCard2').text(dealer.cards[1].rank + dealer.cards[1].suit);
   $('#dealerScore').text("Dealer Score: " + dealer.getScore());
   if (d < 17) {
     dealToDealer();
-    return;
   }
-  if (d > 21) {
-    // alert("Dealer Busts! You Win!");
-    // functionality to add score
+  if ((d >= 17 && d <= 21) ||  (d > 21)){
     endRound();
   }
-  endRound();
 }
 
+var dealerHitId = 2;
+
 function dealToDealer() {
-  var z = 2;
   dealer.addCard(getNextCard());
-  $('.dcardcontainer').last().append('<div class="dcard" id="dealerHitCard"'+z+'></div>');
-  $('#dealerHitCard').text(dealer.cards[z].rank + dealer.cards[z].suit);
-  z+=1;
+  $('.dcardcontainer').last().append('<div class="dhcard" id="dealerHitCard'+dealerHitId+'"></div>');
+  $('#dealerHitCard'+dealerHitId).text(dealer.cards[dealerHitId].rank + dealer.cards[dealerHitId].suit);
+  dealerHitId +=1;
   playDealer();
 }
 
 function endRound() {
   document.getElementById("hitButton").disabled = true;
   document.getElementById("stayButton").disabled = true;
-  $('#dealerCard2').css("color","black");
+  $('#dealerCard2').text(dealer.cards[1].rank + dealer.cards[1].suit);
   var d, p;
   d = dealer.getScore();
-  if(d < 21){
-    $('#dealerScore').text('Score: ' + d);
-  }
+  $('#dealerScore').text('Dealer Score: ' + d);
 
   p = player.getScore();
 
-  if (p < 21 && d > 21) {
-    $('.scorecontainer').last().append('<p>You Win! Dealer Busted!</p>');
+  if(player.blackjack && !dealer.blackjack){
+    $('.scorecontainer').last().append('<p>Blackjack! You Win!!! 😎</p>');
     aggScore += 1;
     $('#aggScore').text("Cumulative Score: " + aggScore);
+    $('#lastResult').text("Previous Result: Win");
   }
-  else if (p < 21 && p > d && d < 21) {
-    $('.scorecontainer').last().append('<p>You Win!</p>');
-    aggScore += 1;
-    $('#aggScore').text("Cumulative Score: " + aggScore);
-  }
-  else if (p > 21){
-    $('.scorecontainer').last().append('<p>Bust! You lose, loser!</p>');
+  if(!player.blackjack && dealer.blackjack){
+    $('.scorecontainer').last().append('<p>Dealer Has Blackjack!😲Tough Luck!</p>');
+    $('#dealerCard2').text(dealer.cards[1].rank + dealer.cards[1].suit);
     aggScore -= 1;
     $('#aggScore').text("Cumulative Score: " + aggScore);
+    $('#lastResult').text("Previous Result: Loss");
   }
-  else if (p < d && p < 21 && d < 21) {
-    $('.scorecontainer').last().append('<p>You Lose... 😲</p>');
-    aggScore -= 1;
-    $('#aggScore').text("Cumulative Score: " + aggScore);
+  if(player.blackjack && dealer.blackjack){
+    $('.scorecontainer').last().append('<p>DOUBLE BJ! 😜</p>');
+    $('#dealerCard2').text(dealer.cards[1].rank + dealer.cards[1].suit);
+    $('#lastResult').text("Previous Result: Double BJ");
   }
-  else if (player.getScore() === dealer.getScore()) {
-    $('.scorecontainer').last().append('<p>Push!</p>');
+  if(!player.blackjack && !dealer.blackjack){
+    if (p <= 21 && d > 21) {
+      $('.scorecontainer').last().append('<p>You Win! Dealer Busted!</p>');
+      aggScore += 1;
+      $('#aggScore').text("Cumulative Score: " + aggScore);
+      $('#lastResult').text("Previous Result: Win");
+    }
+    else if (p <= 21 && p > d && d < 21) {
+      $('.scorecontainer').last().append('<p>You Win!</p>');
+      aggScore += 1;
+      $('#aggScore').text("Cumulative Score: " + aggScore);
+      $('#lastResult').text("Previous Result: Win");
+    }
+    else if (p > 21){
+      $('.scorecontainer').last().append('<p>Bust! You lose, loser!</p>');
+      aggScore -= 1;
+      $('#aggScore').text("Cumulative Score: " + aggScore);
+      $('#lastResult').text("Previous Result: Loss");
+    }
+    else if (p < d && p <= 21 && d < 21) {
+      $('.scorecontainer').last().append('<p>You Lose... 😲</p>');
+      aggScore -= 1;
+      $('#aggScore').text("Cumulative Score: " + aggScore);
+      $('#lastResult').text("Previous Result: Loss");
+    }
+    else if (player.getScore() === dealer.getScore()) {
+      $('.scorecontainer').last().append('<p>Push!</p>');
+      $('#lastResult').text("Previous Result: Push");
+    }
   }
 }
 

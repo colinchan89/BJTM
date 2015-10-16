@@ -30,7 +30,9 @@ function startGame() {
 function startRound(){
   hitButton.prop("disabled",false);
   stayButton.prop("disabled",false);
-  $('#dealerCard2').addClass("inactive");
+  $('.pcard').addClass("inactive");
+  $('.dcard').addClass("inactive");
+  $('#dealerCard2').removeClass("animated flipInY");
 
   $('.hcard').remove();
   $('.dhcard').remove();
@@ -64,6 +66,8 @@ function dealRound(){
       dealer.addCard(getNextCard());
       break;
     default:
+      $('.pcard').addClass("animated slideInDown");
+      $('#dealerCard1').addClass("animated slideInUp");
       $('.pcard').removeClass("inactive");
       $('#dealerCard1').removeClass("inactive");
       $('#userCard1').text(player.cards[0].rank + player.cards[0].suit);
@@ -143,22 +147,22 @@ function playRound(){
 var playerHitId = 2;
 
 function playerHit() {
-  var x, y;
+  var playerScore;
 
   // x = curPlayerHand;
   player.addCard(getNextCard());
-  $('.pcardcontainer').last().append('<div class="hcard" id="hitCard'+playerHitId+'"></div>');
+  $('.pcardcontainer').last().append('<div class="hcard animated slideInDown" id="hitCard'+playerHitId+'"></div>');
   $('#hitCard'+playerHitId).text(player.cards[playerHitId].rank + player.cards[playerHitId].suit);
   playerHitId += 1;
-  y = player.getScore();
+  playerScore = player.getScore();
 
-  if (y > 21) {
-    $('#userScore').text('Your Score: ' + y);
+  if (playerScore > 21) {
+    $('#userScore').text('Your Score: ' + playerScore);
     endRound();
     return;
   }
   else {
-    $('#userScore').text('Your Score: ' + y);
+    $('#userScore').text('Your Score: ' + playerScore);
   }
   // if (player.doubledown){
   //   $('#userScore').text('Your Score: ' + y);
@@ -199,7 +203,6 @@ function playerStay(){
 
 function startDealer() {
   var i, bust;
-
   bust = true;
   if (player.getScore() <= 21){
       bust = false;
@@ -216,10 +219,12 @@ function startDealer() {
 function playDealer() {
   var d;
   d = dealer.getScore();
+  $('#dealerCard2').removeClass("inactive");
+  $('#dealerCard2').addClass("animated flipInY");
   $('#dealerCard2').text(dealer.cards[1].rank + dealer.cards[1].suit);
   $('#dealerScore').text("Dealer Score: " + dealer.getScore());
   if (d < 17) {
-    dealToDealer();
+    setTimeout(dealToDealer,1200);
   }
   if ((d >= 17 && d <= 21) ||  (d > 21)){
     endRound();
@@ -230,17 +235,20 @@ var dealerHitId = 2;
 
 function dealToDealer() {
   dealer.addCard(getNextCard());
-  $('.dcardcontainer').last().append('<div class="dhcard" id="dealerHitCard'+dealerHitId+'"></div>');
+  $('.dcardcontainer').last().append('<div class="dhcard animated slideInUp" id="dealerHitCard'+dealerHitId+'"></div>');
   $('#dealerHitCard'+dealerHitId).text(dealer.cards[dealerHitId].rank + dealer.cards[dealerHitId].suit);
   dealerHitId +=1;
   playDealer();
 }
 
 function endRound() {
-  document.getElementById("hitButton").disabled = true;
-  document.getElementById("stayButton").disabled = true;
+  hitButton.prop("disabled",true);
+  stayButton.prop("disabled",true);
   $('#dealerCard2').removeClass("inactive");
+  $('#dealerCard2').addClass("animated flipInY");
   $('#dealerCard2').text(dealer.cards[1].rank + dealer.cards[1].suit);
+  $('.pcard').toggleClass("animated slideInDown");
+  $('#dealerCard1').toggleClass("animated slideInUp");
   var d, p;
   d = dealer.getScore();
   $('#dealerScore').text('Dealer Score: ' + d);
@@ -267,25 +275,25 @@ function endRound() {
   }
   if(!player.blackjack && !dealer.blackjack){
     if (p <= 21 && d > 21) {
-      $('.scorecontainer').last().append('<p>You Win! Dealer Busted!</p>');
+      $('.scorecontainer').last().append('<p>You Win!👍👍👍Dealer Busts!</p>');
       aggScore += 1;
       $('#aggScore').text("Cumulative Score: " + aggScore);
       $('#lastResult').text("Previous Result: Win");
     }
     else if (p <= 21 && p > d && d < 21) {
-      $('.scorecontainer').last().append('<p>You Win!</p>');
+      $('.scorecontainer').last().append('<p>You Win!👏👏👏</p>');
       aggScore += 1;
       $('#aggScore').text("Cumulative Score: " + aggScore);
       $('#lastResult').text("Previous Result: Win");
     }
     else if (p > 21){
-      $('.scorecontainer').last().append('<p>Bust! You lose, loser!</p>');
+      $('.scorecontainer').last().append('<p>Bust! 😭😭😭 You lose!</p>');
       aggScore -= 1;
       $('#aggScore').text("Cumulative Score: " + aggScore);
       $('#lastResult').text("Previous Result: Loss");
     }
-    else if (p < d && p <= 21 && d < 21) {
-      $('.scorecontainer').last().append('<p>You Lose... 😲</p>');
+    else if (p < d && p <= 21 && d <= 21) {
+      $('.scorecontainer').last().append('<p>You Lose... 😲😲😲</p>');
       aggScore -= 1;
       $('#aggScore').text("Cumulative Score: " + aggScore);
       $('#lastResult').text("Previous Result: Loss");

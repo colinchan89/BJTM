@@ -4,12 +4,13 @@ var stayButton = $('#stayButton');
 
 var deck;
 var dealer;
-var player = new Array();
-var curPlayerHand;
-var numPlayerHands;
+var player;
+// var curPlayerHand;
+// var numPlayerHands;
 var dealRoundCounter;
 var aggScore = 0;
 var lastResult;
+var playerHitId = 2;
 
 window.onload = startGame;
 
@@ -128,7 +129,7 @@ function playRound(){
 // function playerDouble(){
 //   scipt for double down goes here!
 // }
-var playerHitId = 2;
+
 
 function playerHit() {
   var playerScore;

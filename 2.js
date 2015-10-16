@@ -67,7 +67,7 @@ function dealRound(){
       break;
     default:
       $('.pcard').addClass("animated slideInDown");
-      $('#dealerCard1').addClass("animated slideInUp");
+      $('#dealerCard1').addClass("animated slideInRight");
       $('.pcard').removeClass("inactive");
       $('#dealerCard1').removeClass("inactive");
       $('#userCard1').text(player.cards[0].rank + player.cards[0].suit);
@@ -80,10 +80,7 @@ function dealRound(){
       return;
       break;
   }
-  // if(player.getScore() === 21){
-  //   player.blackjack = true;
-  //   alert("BlackJack!!!");
-  // }
+
   dealRoundCounter += 1;
   // setInterval(dealRound, 1000); //should delay init dealing of cards
   dealRound();
@@ -92,30 +89,17 @@ function dealRound(){
 function playRound(){
   if(player.getScore() === 21 && dealer.getScore() !== 21){
     player.blackjack = true;
-    // $('.scorecontainer').last().append('<p>Blackjack! You Win!!! 😎</p>');
-    // aggScore += 1;
-    // $('#aggScore').text("Cumulative Score: " + aggScore);
     endRound();
   }
   if(player.getScore() !== 21 && dealer.getScore() === 21){
     dealer.blackjack = true;
-    // $('.scorecontainer').last().append('<p>Dealer Has Blackjack!😲Tough Luck!</p>');
-    // $('#dealerCard2').css("color","black");
-    // aggScore -= 1;
-    // $('#aggScore').text("Cumulative Score: " + aggScore);
     endRound();
   }
   if(player.getScore() === 21 && dealer.getScore() === 21){
     player.blackjack = true;
     dealer.blackjack = true;
-    // $('.scorecontainer').last().append('<p>DOUBLE BJ! 😜</p>');
-    // $('#dealerCard2').css("color","black");
     endRound();
   }
-  // if(player.blackjack || dealer.blackjack){
-  //   endRound();
-  //   return;
-  // }
   // if(canSplit()){
   //   script for splits goes here!
   // }
@@ -209,12 +193,9 @@ function startDealer() {
     }
   if (bust) {
     endRound();
-    // return;
   }
   playDealer();
 }
-
-
 
 function playDealer() {
   var d;
@@ -235,7 +216,7 @@ var dealerHitId = 2;
 
 function dealToDealer() {
   dealer.addCard(getNextCard());
-  $('.dcardcontainer').last().append('<div class="dhcard animated slideInUp" id="dealerHitCard'+dealerHitId+'"></div>');
+  $('.dcardcontainer').last().append('<div class="dhcard animated slideInRight" id="dealerHitCard'+dealerHitId+'"></div>');
   $('#dealerHitCard'+dealerHitId).text(dealer.cards[dealerHitId].rank + dealer.cards[dealerHitId].suit);
   dealerHitId +=1;
   playDealer();
@@ -248,7 +229,7 @@ function endRound() {
   $('#dealerCard2').addClass("animated flipInY");
   $('#dealerCard2').text(dealer.cards[1].rank + dealer.cards[1].suit);
   $('.pcard').toggleClass("animated slideInDown");
-  $('#dealerCard1').toggleClass("animated slideInUp");
+  $('#dealerCard1').toggleClass("animated slideInRight");
   var d, p;
   d = dealer.getScore();
   $('#dealerScore').text('Dealer Score: ' + d);
@@ -345,7 +326,7 @@ function Hand(id) {
 function deckMakeDeck(n) {
   var ranks = new Array("A", "2", "3", "4", "5", "6", "7", "8", "9","10", "J",
   "Q", "K");
-  var suits = new Array("♣︎", "♦︎", "♥︎", "♠︎");
+  var suits = new Array("♣︎", "♢", "♡", "♠︎");
   var i;
   var j;
   var k;

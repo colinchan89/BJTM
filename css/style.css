@@ -1,11 +1,13 @@
-#container {
-  height:100vh;
+.page {
+  height:100%;
   width:100%;
+  box-sizing: border-box;
   background-color: green;
   border: 10px solid gold;
   margin:0 auto;
+  overflow: auto;
   text-align: center;
-  position: relative;
+  position: absolute;
   margin-top: -8px;
 }
 .dcard {
@@ -107,16 +109,12 @@ button {
   border-color: white;
   font-family: 'Futura';
 }
-*{
-  /*font-family: 'Futura', sans-serif;
-  font-size: 22px;*/
-}
 
 
+/*
 @media (min-width:938px){
-#container {
-  height:658px;
-  width:100%;
+.page {
+  height:100%;
   background-image: url(../images/bg.png);
   background-repeat: no-repeat;
   background-size: cover;
@@ -165,6 +163,4 @@ button {
 }
 p{
   margin: 0;
-}
-
-}
+}*/
